@@ -113,7 +113,7 @@ public class BookService(IUnitOfWork unitOfWork, IMapper mapper) : IBookService
           ?? throw new NotFoundException($"Book with Id ({id}) is not found!");
 
         if (book.Title != "" || book.Title is not null)
-            existBook.Genre = book.Genre;
+            existBook.Title = book.Title;
 
         if (book.Genre != "" || book.Genre is not null)
             existBook.Genre = book.Genre;
