@@ -19,7 +19,6 @@ public class MappingProfile : Profile
         CreateMap<Book, BookUpdateModel>().ReverseMap();
         CreateMap<Book, BookViewModel>().ReverseMap();
 
-
         CreateMap<Publisher, PublisherCreateModel>().ReverseMap();
         CreateMap<Publisher, PublisherUpdateModel>().ReverseMap();
         CreateMap<Publisher, PublisherViewModel>().ReverseMap();

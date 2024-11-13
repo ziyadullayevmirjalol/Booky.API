@@ -18,10 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ApiService\Authors\" />
-    <Folder Include="ApiService\Books\" />
-    <Folder Include="ApiService\Reviews\" />
-    <Folder Include="ApiService\Publishers\" />
     <Folder Include="Validators\Reviiews\" />
   </ItemGroup>
 

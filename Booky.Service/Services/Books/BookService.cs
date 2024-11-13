@@ -1,6 +1,7 @@
 ﻿using Booky.DataAccess.UnitOfWorks;
 using Booky.Domain.Entities;
 using Booky.Service.Exceptions;
+using Booky.Service.Extensions;
 using Booky.Service.Services.Authors;
 
 namespace Booky.Service.Services.Books;
@@ -15,6 +16,7 @@ public class BookService(IAuthorService authorService, IUnitOfWork unitOfWork) :
         if (existBook is not null)
             throw new AlreadyExistException($"Book with Title ({book.Title} and Genere ({book.Genre}) is already exists!)");
 
+        book.ISBN = ISBNGenerator.GenerateISBN13();
         var created = await unitOfWork.Books.InsertAsync(book);
         await unitOfWork.SaveAsync();
 
