@@ -3,7 +3,12 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Booky.DataAccess\Booky.DataAccess.csproj" />
+    <ProjectReference Include="..\Booky.Domain\Booky.Domain.csproj" />
+  </ItemGroup>
 
 </Project>
