@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Booky.DataAccess\Booky.DataAccess.csproj" />
     <ProjectReference Include="..\Booky.Domain\Booky.Domain.csproj" />
   </ItemGroup>

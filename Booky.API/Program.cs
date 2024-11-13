@@ -1,7 +1,7 @@
 using Booky.API.Extensions;
 using Booky.API.Helpers;
-using Booky.API.Mappers;
 using Booky.DataAccess.Contexts;
+using Booky.Service.Mappers;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 

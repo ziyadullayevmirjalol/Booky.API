@@ -1,12 +1,12 @@
-﻿using Booky.Domain.Entities;
+﻿using Booky.Domain.Models.Book;
 
 namespace Booky.Service.Services.Books;
 
 public interface IBookService
 {
-    public ValueTask<Book> CreateAsync(Book book);
-    public ValueTask<Book> UpdateAsync(long id, Book book);
+    public ValueTask<BookViewModel> CreateAsync(BookCreateModel book);
+    public ValueTask<BookViewModel> UpdateAsync(long id, BookUpdateModel book);
     public ValueTask<bool> DeleteAsync(long id);
-    public ValueTask<Book> GetByIdAsync(long id);
-    public ValueTask<IEnumerable<Book>> GetAllAsync();
+    public ValueTask<BookWithAouthorsViewModel> GetByIdAsync(long id);
+    public ValueTask<IEnumerable<BookViewModel>> GetAllAsync();
 }

@@ -8,7 +8,7 @@ public class PublisherService(IBookService bookService, IUnitOfWork unitOfWork) 
 {
     public ValueTask<Publisher> CreateAsync(Publisher publisher)
     {
-        
+        throw new NotImplementedException();
     }
 
     public ValueTask<bool> DeleteAsync(long id)

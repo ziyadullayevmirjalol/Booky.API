@@ -1,4 +1,4 @@
-﻿namespace Booky.API.Models.Author;
+﻿namespace Booky.Domain.Models.Author;
 
 public class AuthorCreateModel
 {

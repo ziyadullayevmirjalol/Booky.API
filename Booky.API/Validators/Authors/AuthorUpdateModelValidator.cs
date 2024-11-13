@@ -1,4 +1,4 @@
-﻿using Booky.API.Models.Author;
+﻿using Booky.Domain.Models.Author;
 using FluentValidation;
 
 namespace Booky.API.Validators.Authors;

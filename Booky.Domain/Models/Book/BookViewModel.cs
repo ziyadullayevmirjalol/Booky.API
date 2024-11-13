@@ -1,4 +1,4 @@
-﻿namespace Booky.API.Models.Book;
+﻿namespace Booky.Domain.Models.Book;
 
 public class BookViewModel
 {
@@ -8,7 +8,7 @@ public class BookViewModel
     public DateTime PublishedDate { get; set; }
     public string ISBN { get; set; }
 
-    public string PublisherName { get; set; }
+    public string PublisherId { get; set; }
 
-    public List<string> AuthorsName { get; set; }
+    public List<long> AuthorsId { get; set; }
 }

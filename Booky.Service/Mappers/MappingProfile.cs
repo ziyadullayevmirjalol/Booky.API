@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Booky.API.Models.Author;
-using Booky.API.Models.Book;
-using Booky.API.Models.Publisher;
-using Booky.API.Models.Review;
 using Booky.Domain.Entities;
+using Booky.Domain.Models.Author;
+using Booky.Domain.Models.Book;
+using Booky.Domain.Models.Publisher;
+using Booky.Domain.Models.Review;
 
-namespace Booky.API.Mappers;
+namespace Booky.Service.Mappers;
 
 public class MappingProfile : Profile
 {

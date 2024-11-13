@@ -1,26 +1,44 @@
-﻿using Booky.DataAccess.UnitOfWorks;
+﻿using AutoMapper;
+using Booky.DataAccess.UnitOfWorks;
 using Booky.Domain.Entities;
+using Booky.Domain.Models.Book;
 using Booky.Service.Exceptions;
 using Booky.Service.Extensions;
-using Booky.Service.Services.Authors;
 
 namespace Booky.Service.Services.Books;
 
-public class BookService(IAuthorService authorService, IUnitOfWork unitOfWork) : IBookService
+public class BookService(IUnitOfWork unitOfWork, IMapper mapper) : IBookService
 {
-    public async ValueTask<Book> CreateAsync(Book book)
+    public async ValueTask<BookViewModel> CreateAsync(BookCreateModel book)
     {
         var existBook = await unitOfWork.Books.SelectAsync(
             expression: b => (b.Title == book.Title && b.Genre == book.Genre) && !b.IsDeleted);
 
         if (existBook is not null)
-            throw new AlreadyExistException($"Book with Title ({book.Title} and Genere ({book.Genre}) is already exists!)");
+            throw new AlreadyExistException($"Book with Title ({book.Title}) and Genre ({book.Genre}) already exists!");
 
-        book.ISBN = ISBNGenerator.GenerateISBN13();
-        var created = await unitOfWork.Books.InsertAsync(book);
+        var createdBook = mapper.Map<Book>(book);
+        createdBook.ISBN = ISBNGenerator.GenerateISBN13();
+
+        createdBook = await unitOfWork.Books.InsertAsync(createdBook);
         await unitOfWork.SaveAsync();
 
-        return created;
+        var authors = await unitOfWork.Authors.SelectAsEnumerableAsync(
+            expression: a => book.AuthorsId.Contains(a.Id) && !a.IsDeleted);
+        createdBook.Book_Authors = authors.Select(a => new BookAuthor { BookId = createdBook.Id, AuthorId = a.Id }).ToList();
+
+        await unitOfWork.SaveAsync();
+
+        var result = new BookViewModel
+        {
+            Id = createdBook.Id,
+            Title = createdBook.Title,
+            Genre = createdBook.Genre,
+            ISBN = createdBook.ISBN,
+            AuthorsId = authors.Select(a => a.Id).ToList()
+        };
+
+        return result;
     }
 
     public async ValueTask<bool> DeleteAsync(long id)
@@ -35,25 +53,37 @@ public class BookService(IAuthorService authorService, IUnitOfWork unitOfWork) :
         return true;
     }
 
-    public async ValueTask<IEnumerable<Book>> GetAllAsync()
+    public async ValueTask<IEnumerable<BookViewModel>> GetAllAsync()
     {
         var Books = await unitOfWork.Books.SelectAsEnumerableAsync(
             expression: b => !b.IsDeleted,
             isTracked: false);
 
-        return Books;
+        return mapper.Map<IEnumerable<BookViewModel>>(Books);
     }
 
-    public async ValueTask<Book> GetByIdAsync(long id)
+    public async ValueTask<BookWithAouthorsViewModel> GetByIdAsync(long id)
     {
         var existBook = await unitOfWork.Books.SelectAsync(
-          expression: b => b.Id == id && !b.IsDeleted)
+          expression: b => b.Id == id && !b.IsDeleted,
+          includes: ["Book_Authors"])
           ?? throw new NotFoundException($"Book with Id ({id}) is not found!");
 
-        return existBook;
+        var result = new BookWithAouthorsViewModel()
+        {
+            Id = existBook.Id,
+            Genre = existBook.Genre,
+            ISBN = existBook.ISBN,
+            Title = existBook.Title,
+            PublishedDate = existBook.PublishedDate,
+            PublisherName = existBook.Publisher.Name,
+
+            AuthorsName = existBook.Book_Authors.Select(a => a.Author.FirstName + "" + a.Author.LastName).ToList(),
+        };
+        return result;
     }
 
-    public async ValueTask<Book> UpdateAsync(long id, Book book)
+    public async ValueTask<BookViewModel> UpdateAsync(long id, BookUpdateModel book)
     {
         var existBook = await unitOfWork.Books.SelectAsync(
           expression: b => b.Id == id && !b.IsDeleted)
@@ -63,12 +93,13 @@ public class BookService(IAuthorService authorService, IUnitOfWork unitOfWork) :
             existBook.Genre = book.Genre;
 
         if (book.Genre != "" || book.Genre is not null)
-            existBook.ISBN = book.ISBN;
+            existBook.Genre = book.Genre;
+
         existBook.UpdatedAt = DateTime.UtcNow;
 
         var updated = await unitOfWork.Books.UpdateAsync(existBook);
         await unitOfWork.SaveAsync();
 
-        return updated;
+        return mapper.Map<BookViewModel>(updated);
     }
 }

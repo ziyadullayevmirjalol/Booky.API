@@ -1,6 +1,6 @@
-﻿namespace Booky.API.Models.Book;
+﻿namespace Booky.Domain.Models.Book;
 
-public class BookCreateModel
+public class BookUpdateModel
 {
     public string Title { get; set; }
     public string Genre { get; set; }

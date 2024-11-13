@@ -1,4 +1,4 @@
-﻿using Booky.API.Models.Publisher;
+﻿using Booky.Domain.Models.Publisher;
 
 namespace Booky.API.ApiService.Publishers;
 

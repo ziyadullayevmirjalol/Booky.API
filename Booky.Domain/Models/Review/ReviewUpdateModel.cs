@@ -1,4 +1,4 @@
-﻿namespace Booky.API.Models.Review;
+﻿namespace Booky.Domain.Models.Review;
 
 public class ReviewUpdateModel
 {

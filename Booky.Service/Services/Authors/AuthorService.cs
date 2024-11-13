@@ -1,13 +1,14 @@
-﻿using Booky.DataAccess.UnitOfWorks;
+﻿using AutoMapper;
+using Booky.DataAccess.UnitOfWorks;
 using Booky.Domain.Entities;
+using Booky.Domain.Models.Author;
 using Booky.Service.Exceptions;
-using Booky.Service.Services.Books;
 
 namespace Booky.Service.Services.Authors;
 
-public class AuthorService(IBookService bookService, IUnitOfWork unitOfWork) : IAuthorService
+public class AuthorService(IUnitOfWork unitOfWork, IMapper mapper) : IAuthorService
 {
-    public async ValueTask<Author> CreateAsync(Author author)
+    public async ValueTask<AuthorViewModel> CreateAsync(AuthorCreateModel author)
     {
         var existAuthor = await unitOfWork.Authors.SelectAsync(
             expression: a => (a.FirstName == author.FirstName && a.LastName == author.LastName) && !a.IsDeleted);
@@ -15,13 +16,13 @@ public class AuthorService(IBookService bookService, IUnitOfWork unitOfWork) : I
         if (existAuthor is not null)
             throw new AlreadyExistException("This author is already exists!");
 
-        var created = await unitOfWork.Authors.InsertAsync(author);
+        var created = await unitOfWork.Authors.InsertAsync(mapper.Map<Author>(author));
         await unitOfWork.SaveAsync();
 
-        return created;
+        return mapper.Map<AuthorViewModel>(created);
     }
 
-    public async ValueTask<Author> UpdateAsync(long id, Author author)
+    public async ValueTask<AuthorViewModel> UpdateAsync(long id, AuthorUpdateModel author)
     {
         var existAuthor = await unitOfWork.Authors.SelectAsync(
            expression: a => a.Id == id && !a.IsDeleted)
@@ -38,10 +39,10 @@ public class AuthorService(IBookService bookService, IUnitOfWork unitOfWork) : I
 
         existAuthor.UpdatedAt = DateTime.UtcNow;
 
-        var updated = await unitOfWork.Authors.UpdateAsync(existAuthor);
+        var updated = await unitOfWork.Authors.UpdateAsync(mapper.Map<Author>(existAuthor));
         await unitOfWork.SaveAsync();
 
-        return updated;
+        return mapper.Map<AuthorViewModel>(updated);
     }
 
     public async ValueTask<bool> DeleteAsync(long id)
@@ -56,21 +57,42 @@ public class AuthorService(IBookService bookService, IUnitOfWork unitOfWork) : I
         return true;
     }
 
-    public async ValueTask<Author> GetByIdAsync(long id)
+    public async ValueTask<AuthorWithBooksViewModel> GetByIdAsync(long id)
     {
         var existAuthor = await unitOfWork.Authors.SelectAsync(
-           expression: a => a.Id == id && !a.IsDeleted)
+           expression: a => a.Id == id && !a.IsDeleted,
+           includes: ["Book_Authors"])
            ?? throw new NotFoundException("Author is not found");
 
-        return existAuthor;
+        var result = new AuthorWithBooksViewModel()
+        {
+            Id = existAuthor.Id,
+            FirstName = existAuthor.FirstName,
+            LastName = existAuthor.LastName,
+            Biography = existAuthor.Biography,
+            BookTitles = existAuthor.Book_Authors.Select(b => b.Book.Title).ToList(),
+        };
+
+        return result;
     }
 
-    public async ValueTask<IEnumerable<Author>> GetAllAsync()
+    public async ValueTask<IEnumerable<AuthorViewModel>> GetAllAsync()
     {
         var Authors = await unitOfWork.Authors.SelectAsEnumerableAsync(
             expression: a => !a.IsDeleted,
+            includes: ["Book_Authors"],
             isTracked: false);
 
-        return Authors;
+
+        var result = Authors.Select(author => new AuthorViewModel
+        {
+            Id = author.Id,
+            FirstName = author.FirstName,
+            LastName = author.LastName,
+            Biography = author.Biography,
+            BooksId = author.Book_Authors.Select(b => b.Id).ToList()
+        }).ToList();
+
+        return result;
     }
 }

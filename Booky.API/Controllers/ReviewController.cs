@@ -1,6 +1,6 @@
 ﻿using Booky.API.ApiService.Reviews;
 using Booky.API.Models.Response;
-using Booky.API.Models.Review;
+using Booky.Domain.Models.Review;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Booky.API.Controllers;

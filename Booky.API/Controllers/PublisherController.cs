@@ -1,6 +1,6 @@
 ﻿using Booky.API.ApiService.Publishers;
-using Booky.API.Models.Publisher;
 using Booky.API.Models.Response;
+using Booky.Domain.Models.Publisher;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Booky.API.Controllers;

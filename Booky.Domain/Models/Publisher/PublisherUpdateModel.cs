@@ -1,4 +1,4 @@
-﻿namespace Booky.API.Models.Publisher;
+﻿namespace Booky.Domain.Models.Publisher;
 
 public class PublisherUpdateModel
 {

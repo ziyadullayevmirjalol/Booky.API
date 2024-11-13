@@ -1,13 +1,13 @@
-﻿using Booky.Domain.Entities;
+﻿using Booky.Domain.Models.Author;
 
 namespace Booky.Service.Services.Authors;
 
 public interface IAuthorService
 {
-    public ValueTask<Author> CreateAsync(Author author);
-    public ValueTask<Author> UpdateAsync(long id, Author author);
+    public ValueTask<AuthorViewModel> CreateAsync(AuthorCreateModel author);
+    public ValueTask<AuthorViewModel> UpdateAsync(long id, AuthorUpdateModel author);
     public ValueTask<bool> DeleteAsync(long id);
-    public ValueTask<Author> GetByIdAsync(long id);
-    public ValueTask<IEnumerable<Author>> GetAllAsync();
+    public ValueTask<AuthorWithBooksViewModel> GetByIdAsync(long id);
+    public ValueTask<IEnumerable<AuthorViewModel>> GetAllAsync();
 }
 

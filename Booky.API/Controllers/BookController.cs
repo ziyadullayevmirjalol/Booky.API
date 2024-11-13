@@ -1,8 +1,6 @@
 ﻿using Booky.API.ApiService.Books;
-using Booky.API.Models.Author;
-using Booky.API.Models.Book;
 using Booky.API.Models.Response;
-using Booky.Service.Services.Authors;
+using Booky.Domain.Models.Book;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Booky.API.Controllers;

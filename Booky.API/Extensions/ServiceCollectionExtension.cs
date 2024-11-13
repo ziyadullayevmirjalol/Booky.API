@@ -1,4 +1,11 @@
-﻿using Booky.API.Middlewares;
+﻿using Booky.API.ApiService.Authors;
+using Booky.API.ApiService.Books;
+using Booky.API.ApiService.Publishers;
+using Booky.API.ApiService.Reviews;
+using Booky.API.Middlewares;
+using Booky.API.Validators.Authors;
+using Booky.API.Validators.Books;
+using Booky.API.Validators.Publishers;
 using Booky.DataAccess.UnitOfWorks;
 using Booky.Service.Services.Authors;
 using Booky.Service.Services.Books;
@@ -22,15 +29,22 @@ public static class ServiceCollectionExtension
     public static void AddApiServices(this IServiceCollection services)
     {
         services.AddScoped<IAuthorApiService, AuthorApiService>();
-
-
+        services.AddScoped<IBookApiService, BookApiService>();
+        services.AddScoped<IPublisherApiServce, PublisherApiService>();
+        services.AddScoped<IReviewApiService, ReviewApiService>();
     }
 
     public static void AddValidators(this IServiceCollection services)
     {
-        services.AddTransient<UserCreateModelValidator>();
-        services.AddTransient<UserUpdateModelValidator>();
-        services.AddTransient<UserChangePasswordModelValidator>();
+        services.AddTransient<AuthorCreateModelValidator>();
+        services.AddTransient<AuthorUpdateModelValidator>();
+
+        services.AddTransient<BookUpdateModelValidator>();
+        services.AddTransient<BookCreateModelValidator>();
+
+        services.AddTransient<PublisherUpdateModelValidator>();
+        services.AddTransient<PublisherCreateModelValidator>();
+
     }
 
     public static void AddExceptionHandlers(this IServiceCollection services)

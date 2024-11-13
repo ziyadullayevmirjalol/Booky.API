@@ -1,4 +1,4 @@
-﻿using Booky.API.Models.Review;
+﻿using Booky.Domain.Models.Review;
 
 namespace Booky.API.ApiService.Reviews;
 
@@ -11,4 +11,3 @@ public interface IReviewApiService
     public ValueTask<IEnumerable<ReviewViewModel>> GetAsync();
 
 }
-
