@@ -1,6 +1,4 @@
-﻿using Booky.API.Models.Author;
-
-namespace Booky.API.Models.Book;
+﻿namespace Booky.API.Models.Book;
 
 public class BookViewModel
 {
@@ -12,5 +10,5 @@ public class BookViewModel
 
     public string PublisherName { get; set; }
 
-    public List<AuthorViewModel> Authors { get; set; }
+    public List<string> AuthorsName { get; set; }
 }

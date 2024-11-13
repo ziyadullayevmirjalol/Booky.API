@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.10.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -16,12 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ApiService\" />
-    <Folder Include="Extensions\" />
-    <Folder Include="Validators\Authors\" />
-    <Folder Include="Validators\Books\" />
+    <Folder Include="ApiService\Authors\" />
+    <Folder Include="ApiService\Books\" />
+    <Folder Include="ApiService\Reviews\" />
+    <Folder Include="ApiService\Publishers\" />
     <Folder Include="Validators\Reviiews\" />
-    <Folder Include="Validators\Publishers\" />
   </ItemGroup>
 
   <ItemGroup>
