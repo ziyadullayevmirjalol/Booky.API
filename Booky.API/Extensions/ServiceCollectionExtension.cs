@@ -6,6 +6,7 @@ using Booky.API.Middlewares;
 using Booky.API.Validators.Authors;
 using Booky.API.Validators.Books;
 using Booky.API.Validators.Publishers;
+using Booky.API.Validators.Reviiews;
 using Booky.DataAccess.UnitOfWorks;
 using Booky.Service.Services.Authors;
 using Booky.Service.Services.Books;
@@ -45,6 +46,8 @@ public static class ServiceCollectionExtension
         services.AddTransient<PublisherUpdateModelValidator>();
         services.AddTransient<PublisherCreateModelValidator>();
 
+        services.AddTransient<ReviewCreateModelValidator>();
+        services.AddTransient<ReviewUpdateModelValidator>();
     }
 
     public static void AddExceptionHandlers(this IServiceCollection services)

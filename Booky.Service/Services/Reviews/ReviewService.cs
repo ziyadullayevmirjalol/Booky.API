@@ -67,8 +67,23 @@ public class ReviewService(IBookService bookService, IUnitOfWork unitOfWork, IMa
         return result;
     }
 
-    public ValueTask<ReviewViewModel> UpdateAsync(long id, ReviewUpdateModel review)
+    public async ValueTask<ReviewViewModel> UpdateAsync(long id, ReviewUpdateModel review)
     {
-        throw new NotImplementedException();
+        var existReview = await unitOfWork.Reviews.SelectAsync(
+           expression: r => r.Id == id && !r.IsDeleted)
+           ?? throw new NotFoundException($"Review is not found with Id ({id})");
+
+        if (review.Content != "" || review.Content is not null)
+            existReview.Content = review.Content;
+
+        if (review.Rating != 0 || review.Content is not null)
+            existReview.Rating = review.Rating;
+
+        existReview.UpdatedAt = DateTime.UtcNow;
+
+        var updated = await unitOfWork.Reviews.UpdateAsync(existReview);
+        await unitOfWork.SaveAsync();
+
+        return mapper.Map<ReviewViewModel>(updated);
     }
 }

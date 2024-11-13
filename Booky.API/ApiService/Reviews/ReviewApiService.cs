@@ -1,32 +1,39 @@
-﻿using Booky.Domain.Models.Review;
+﻿using Booky.API.Extensions;
+using Booky.API.Validators.Reviiews;
+using Booky.Domain.Models.Review;
 using Booky.Service.Services.Reviews;
 
 namespace Booky.API.ApiService.Reviews;
 
-public class ReviewApiService() : IReviewApiService
+public class ReviewApiService(
+    IReviewService reviewService,
+    ReviewCreateModelValidator createModelValidator,
+    ReviewUpdateModelValidator updateModelValidator) : IReviewApiService
 {
     public async ValueTask<bool> DeleteAsync(long id)
     {
-        throw new NotImplementedException();
+        return await reviewService.DeleteAsync(id);
     }
 
-    public ValueTask<ReviewViewModel> GetAsync(long id)
+    public async ValueTask<ReviewViewModel> GetAsync(long id)
     {
-        throw new NotImplementedException();
+        return await reviewService.GetByidAsync(id);
     }
 
-    public ValueTask<IEnumerable<ReviewViewModel>> GetAsync()
+    public async ValueTask<IEnumerable<ReviewViewModel>> GetAsync()
     {
-        throw new NotImplementedException();
+        return await reviewService.GetAllsync();
     }
 
-    public ValueTask<ReviewViewModel> PostAsync(ReviewCreateModel model)
+    public async ValueTask<ReviewViewModel> PostAsync(ReviewCreateModel model)
     {
-        throw new NotImplementedException();
+        await createModelValidator.EnsureValidatedAsync(model);
+        return await reviewService.CreateAsync(model);
     }
 
-    public ValueTask<ReviewViewModel> PutAsync(long id, ReviewUpdateModel model)
+    public async ValueTask<ReviewViewModel> PutAsync(long id, ReviewUpdateModel model)
     {
-        throw new NotImplementedException();
+        await updateModelValidator.EnsureValidatedAsync(model);
+        return await reviewService.UpdateAsync(id, model);
     }
 }
