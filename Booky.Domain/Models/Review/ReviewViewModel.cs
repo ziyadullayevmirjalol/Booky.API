@@ -8,5 +8,5 @@ public class ReviewViewModel
     public string Content { get; set; }
     public int Rating { get; set; }
 
-    public BookViewModel Book { get; set; }
+    public string BookTitle { get; set; }
 }

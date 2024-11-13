@@ -80,7 +80,7 @@ public class AuthorService(IUnitOfWork unitOfWork, IMapper mapper) : IAuthorServ
     {
         var Authors = await unitOfWork.Authors.SelectAsEnumerableAsync(
             expression: a => !a.IsDeleted,
-            includes: ["Book_Authors"],
+            includes: ["Book_Authors.Book"],
             isTracked: false);
 
 
@@ -90,7 +90,7 @@ public class AuthorService(IUnitOfWork unitOfWork, IMapper mapper) : IAuthorServ
             FirstName = author.FirstName,
             LastName = author.LastName,
             Biography = author.Biography,
-            BooksId = author.Book_Authors.Select(b => b.Id).ToList()
+            BooksId = author.Book_Authors.Where(ba => ba.Book != null).Select(ba => ba.Book.Id).ToList()
         }).ToList();
 
         return result;

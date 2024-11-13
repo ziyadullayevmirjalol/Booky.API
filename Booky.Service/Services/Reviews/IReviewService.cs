@@ -1,12 +1,13 @@
 ﻿using Booky.Domain.Entities;
+using Booky.Domain.Models.Review;
 
 namespace Booky.Service.Services.Reviews;
 
 public interface IReviewService
 {
-    public ValueTask<Review> CreateAsync(Review review);
-    public ValueTask<Review> UpdateAsync(long id, Review review);
+    public ValueTask<ReviewViewModel> CreateAsync(ReviewCreateModel review);
+    public ValueTask<ReviewViewModel> UpdateAsync(long id, ReviewUpdateModel review);
     public ValueTask<bool> DeleteAsync(long id);
-    public ValueTask<Review> GetByidAsync(long id);
-    public ValueTask<IEnumerable<Review>> GetAllsync();
+    public ValueTask<ReviewViewModel> GetByidAsync(long id);
+    public ValueTask<IEnumerable<ReviewViewModel>> GetAllsync();
 }

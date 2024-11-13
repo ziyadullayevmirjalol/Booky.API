@@ -19,19 +19,23 @@ public class BookService(IUnitOfWork unitOfWork, IMapper mapper) : IBookService
 
         var existPublisher = await unitOfWork.Publishers.SelectAsync(
             expression: p => p.Id == book.PublisherId && !p.IsDeleted)
-            ?? throw new NotFoundException($"Publisher with ID ({book.PublisherId}) is not exists!");
+            ?? throw new NotFoundException($"Publisher with ID ({book.PublisherId}) does not exist!");
 
         var createdBook = mapper.Map<Book>(book);
         createdBook.ISBN = ISBNGenerator.GenerateISBN13();
-
-        createdBook = await unitOfWork.Books.InsertAsync(createdBook);
         createdBook.PublishedDate = DateTime.UtcNow;
-        await unitOfWork.SaveAsync();
 
         var authors = await unitOfWork.Authors.SelectAsEnumerableAsync(
             expression: a => book.AuthorsId.Contains(a.Id) && !a.IsDeleted);
-        createdBook.Book_Authors = authors.Select(a => new BookAuthor { BookId = createdBook.Id, AuthorId = a.Id }).ToList();
 
+        var existingAuthorIds = authors.Select(a => a.Id).ToHashSet();
+        var missingAuthorIds = book.AuthorsId.Where(id => !existingAuthorIds.Contains(id)).ToList();
+
+        if (missingAuthorIds.Any())
+            throw new NotFoundException($"Authors with IDs ({string.Join(", ", missingAuthorIds)}) do not exist!");
+
+        createdBook = await unitOfWork.Books.InsertAsync(createdBook);
+        createdBook.Book_Authors = authors.Select(a => new BookAuthor { BookId = createdBook.Id, AuthorId = a.Id }).ToList();
         await unitOfWork.SaveAsync();
 
         var result = new BookViewModel
@@ -46,6 +50,7 @@ public class BookService(IUnitOfWork unitOfWork, IMapper mapper) : IBookService
 
         return result;
     }
+
 
     public async ValueTask<bool> DeleteAsync(long id)
     {
@@ -63,9 +68,21 @@ public class BookService(IUnitOfWork unitOfWork, IMapper mapper) : IBookService
     {
         var Books = await unitOfWork.Books.SelectAsEnumerableAsync(
             expression: b => !b.IsDeleted,
-            isTracked: false);
+            isTracked: false,
+            includes: ["Book_Authors.Author"]);
 
-        return mapper.Map<IEnumerable<BookViewModel>>(Books);
+        var result = Books.Select(book => new BookViewModel
+        {
+            Id = book.Id,
+            Title = book.Title,
+            Genre = book.Genre,
+            PublishedDate = book.PublishedDate,
+            ISBN = book.ISBN,
+            PublisherId = book.PublisherId,
+            AuthorsId = book.Book_Authors.Where(ba => ba.Author != null).Select(ba => ba.Author.Id).ToList()
+        }).ToList();
+
+        return result;
     }
 
     public async ValueTask<BookWithAouthorsViewModel> GetByIdAsync(long id)

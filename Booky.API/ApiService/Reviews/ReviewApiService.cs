@@ -1,10 +1,11 @@
 ﻿using Booky.Domain.Models.Review;
+using Booky.Service.Services.Reviews;
 
 namespace Booky.API.ApiService.Reviews;
 
-public class ReviewApiService : IReviewApiService
+public class ReviewApiService() : IReviewApiService
 {
-    public ValueTask<bool> DeleteAsync(long id)
+    public async ValueTask<bool> DeleteAsync(long id)
     {
         throw new NotImplementedException();
     }
