@@ -1,8 +1,10 @@
-﻿using Booky.Domain.Entities;
+﻿using Booky.DataAccess.UnitOfWorks;
+using Booky.Domain.Entities;
+using Booky.Service.Services.Books;
 
 namespace Booky.Service.Services.Reviews;
 
-public class ReviewService : IReviewService
+public class ReviewService(IBookService bookService, IUnitOfWork unitOfWork) : IReviewService
 {
     public ValueTask<Review> CreateAsync(Review review)
     {

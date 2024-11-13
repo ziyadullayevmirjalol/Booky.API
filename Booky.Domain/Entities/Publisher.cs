@@ -8,5 +8,5 @@ public class Publisher : Auditable
     public string Address { get; set; }
     public string ContactNumber { get; set; }
 
-    public List<Book> Books { get; set; } = new List<Book>();
+    public List<Book> Books { get; set; }
 }

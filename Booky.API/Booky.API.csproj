@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -16,11 +16,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <Folder Include="ApiService\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Validators\Authors\" />
+    <Folder Include="Validators\Books\" />
+    <Folder Include="Validators\Reviiews\" />
+    <Folder Include="Validators\Publishers\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Booky.DataAccess\Booky.DataAccess.csproj" />
+    <ProjectReference Include="..\Booky.Service\Booky.Service.csproj" />
   </ItemGroup>
 
 </Project>

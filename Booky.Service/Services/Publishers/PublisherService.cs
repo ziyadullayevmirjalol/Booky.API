@@ -1,12 +1,14 @@
-﻿using Booky.Domain.Entities;
+﻿using Booky.DataAccess.UnitOfWorks;
+using Booky.Domain.Entities;
+using Booky.Service.Services.Books;
 
 namespace Booky.Service.Services.Publishers;
 
-public class PublisherService : IPublisherService
+public class PublisherService(IBookService bookService, IUnitOfWork unitOfWork) : IPublisherService
 {
     public ValueTask<Publisher> CreateAsync(Publisher publisher)
     {
-        throw new NotImplementedException();
+        
     }
 
     public ValueTask<bool> DeleteAsync(long id)

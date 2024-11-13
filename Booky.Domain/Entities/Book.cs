@@ -14,4 +14,3 @@ public class Book : Auditable
 
     public List<BookAuthor> Book_Authors { get; set; }
 }
-
