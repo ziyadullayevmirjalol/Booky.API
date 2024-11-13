@@ -1,31 +1,39 @@
-﻿using Booky.Domain.Models.Book;
+﻿using Booky.API.Extensions;
+using Booky.API.Validators.Books;
+using Booky.Domain.Models.Book;
+using Booky.Service.Services.Books;
 
 namespace Booky.API.ApiService.Books;
 
-public class BookApiService : IBookApiService
+public class BookApiService(
+    IBookService bookService,
+    BookCreateModelValidator createModelValidator,
+    BookUpdateModelValidator updateModelValidator) : IBookApiService
 {
-    public ValueTask<bool> DeleteAsync(long id)
+    public async ValueTask<bool> DeleteAsync(long id)
     {
-        throw new NotImplementedException();
+        return await bookService.DeleteAsync(id);
     }
 
-    public ValueTask<BookWithAouthorsViewModel> GetAsync(long id)
+    public async ValueTask<BookWithAouthorsViewModel> GetAsync(long id)
     {
-        throw new NotImplementedException();
+        return await bookService.GetByIdAsync(id);
     }
 
-    public ValueTask<IEnumerable<BookViewModel>> GetAsync()
+    public async ValueTask<IEnumerable<BookViewModel>> GetAsync()
     {
-        throw new NotImplementedException();
+        return await bookService.GetAllAsync();
     }
 
-    public ValueTask<BookViewModel> PostAsync(BookCreateModel model)
+    public async ValueTask<BookViewModel> PostAsync(BookCreateModel model)
     {
-        throw new NotImplementedException();
+        await createModelValidator.EnsureValidatedAsync(model);
+        return await bookService.CreateAsync(model);
     }
 
-    public ValueTask<BookViewModel> PutAsync(long id, BookUpdateModel model)
+    public async ValueTask<BookViewModel> PutAsync(long id, BookUpdateModel model)
     {
-        throw new NotImplementedException();
+        await updateModelValidator.EnsureValidatedAsync(model);
+        return await bookService.UpdateAsync(id, model);
     }
 }

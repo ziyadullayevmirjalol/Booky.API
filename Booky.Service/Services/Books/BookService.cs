@@ -17,10 +17,15 @@ public class BookService(IUnitOfWork unitOfWork, IMapper mapper) : IBookService
         if (existBook is not null)
             throw new AlreadyExistException($"Book with Title ({book.Title}) and Genre ({book.Genre}) already exists!");
 
+        var existPublisher = await unitOfWork.Publishers.SelectAsync(
+            expression: p => p.Id == book.PublisherId && !p.IsDeleted)
+            ?? throw new NotFoundException($"Publisher with ID ({book.PublisherId}) is not exists!");
+
         var createdBook = mapper.Map<Book>(book);
         createdBook.ISBN = ISBNGenerator.GenerateISBN13();
 
         createdBook = await unitOfWork.Books.InsertAsync(createdBook);
+        createdBook.PublishedDate = DateTime.UtcNow;
         await unitOfWork.SaveAsync();
 
         var authors = await unitOfWork.Authors.SelectAsEnumerableAsync(
@@ -35,6 +40,7 @@ public class BookService(IUnitOfWork unitOfWork, IMapper mapper) : IBookService
             Title = createdBook.Title,
             Genre = createdBook.Genre,
             ISBN = createdBook.ISBN,
+            PublisherId = existPublisher.Id,
             AuthorsId = authors.Select(a => a.Id).ToList()
         };
 
@@ -66,7 +72,7 @@ public class BookService(IUnitOfWork unitOfWork, IMapper mapper) : IBookService
     {
         var existBook = await unitOfWork.Books.SelectAsync(
           expression: b => b.Id == id && !b.IsDeleted,
-          includes: ["Book_Authors"])
+          includes: ["Book_Authors.Author", "Publisher"])
           ?? throw new NotFoundException($"Book with Id ({id}) is not found!");
 
         var result = new BookWithAouthorsViewModel()
@@ -78,7 +84,7 @@ public class BookService(IUnitOfWork unitOfWork, IMapper mapper) : IBookService
             PublishedDate = existBook.PublishedDate,
             PublisherName = existBook.Publisher.Name,
 
-            AuthorsName = existBook.Book_Authors.Select(a => a.Author.FirstName + "" + a.Author.LastName).ToList(),
+            AuthorsName = existBook.Book_Authors.Select(a => a.Author.FirstName + " " + a.Author.LastName).ToList(),
         };
         return result;
     }

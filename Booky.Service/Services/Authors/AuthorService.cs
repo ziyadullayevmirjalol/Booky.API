@@ -61,7 +61,7 @@ public class AuthorService(IUnitOfWork unitOfWork, IMapper mapper) : IAuthorServ
     {
         var existAuthor = await unitOfWork.Authors.SelectAsync(
            expression: a => a.Id == id && !a.IsDeleted,
-           includes: ["Book_Authors"])
+           includes: ["Book_Authors.Book"])
            ?? throw new NotFoundException("Author is not found");
 
         var result = new AuthorWithBooksViewModel()

@@ -1,31 +1,39 @@
-﻿using Booky.Domain.Models.Publisher;
+﻿using Booky.API.Extensions;
+using Booky.API.Validators.Publishers;
+using Booky.Domain.Models.Publisher;
+using Booky.Service.Services.Publishers;
 
 namespace Booky.API.ApiService.Publishers;
 
-public class PublisherApiService : IPublisherApiServce
+public class PublisherApiService(
+    IPublisherService publisherService,
+    PublisherCreateModelValidator createModelValidator,
+    PublisherUpdateModelValidator updateModelValidator) : IPublisherApiServce
 {
-    public ValueTask<bool> DeleteAsync(long id)
+    public async ValueTask<bool> DeleteAsync(long id)
     {
-        throw new NotImplementedException();
+        return await publisherService.DeleteAsync(id);
     }
 
-    public ValueTask<PublisherViewModel> GetAsync(long id)
+    public async ValueTask<PublisherViewModel> GetAsync(long id)
     {
-        throw new NotImplementedException();
+        return await publisherService.GetByIdAsync(id);
     }
 
-    public ValueTask<IEnumerable<PublisherViewModel>> GetAsync()
+    public async ValueTask<IEnumerable<PublisherViewModel>> GetAsync()
     {
-        throw new NotImplementedException();
+        return await publisherService.GetAllAsync();
     }
 
-    public ValueTask<PublisherViewModel> PostAsync(PublisherCreateModel model)
+    public async ValueTask<PublisherViewModel> PostAsync(PublisherCreateModel model)
     {
-        throw new NotImplementedException();
+        await createModelValidator.EnsureValidatedAsync(model);
+        return await publisherService.CreateAsync(model);
     }
 
-    public ValueTask<PublisherViewModel> PutAsync(long id, PublisherUpdateModel model)
+    public async ValueTask<PublisherViewModel> PutAsync(long id, PublisherUpdateModel model)
     {
-        throw new NotImplementedException();
+        await updateModelValidator.EnsureValidatedAsync(model);
+        return await publisherService.UpdateAsync(id, model);
     }
 }

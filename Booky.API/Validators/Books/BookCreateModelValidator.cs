@@ -16,5 +16,11 @@ public class BookCreateModelValidator : AbstractValidator<BookCreateModel>
          .NotNull()
          .NotEmpty()
          .WithMessage("Genre is required!");
+
+        RuleFor(book => book.PublisherId)
+         .NotNull()
+         .NotEmpty()
+         .NotEqual(0)
+         .WithMessage("Publisher ID is required!");
     }
 }

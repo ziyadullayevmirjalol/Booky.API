@@ -1,12 +1,12 @@
-﻿using Booky.Domain.Entities;
+﻿using Booky.Domain.Models.Publisher;
 
 namespace Booky.Service.Services.Publishers;
 
 public interface IPublisherService
 {
-    public ValueTask<Publisher> CreateAsync(Publisher publisher);
-    public ValueTask<Publisher> UpdateAsync(long id, Publisher publisher);
+    public ValueTask<PublisherViewModel> CreateAsync(PublisherCreateModel publisher);
+    public ValueTask<PublisherViewModel> UpdateAsync(long id, PublisherUpdateModel publisher);
     public ValueTask<bool> DeleteAsync(long id);
-    public ValueTask<Publisher> GetByIdAsync(long id);
-    public ValueTask<IEnumerable<Publisher>> GetAllAsync();
+    public ValueTask<PublisherViewModel> GetByIdAsync(long id);
+    public ValueTask<IEnumerable<PublisherViewModel>> GetAllAsync();
 }

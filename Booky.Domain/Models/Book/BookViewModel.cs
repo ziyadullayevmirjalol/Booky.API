@@ -8,7 +8,7 @@ public class BookViewModel
     public DateTime PublishedDate { get; set; }
     public string ISBN { get; set; }
 
-    public string PublisherId { get; set; }
+    public long PublisherId { get; set; }
 
     public List<long> AuthorsId { get; set; }
 }
