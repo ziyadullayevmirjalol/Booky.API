@@ -1,6 +1,4 @@
-﻿using Booky.Domain.Models.Book;
-
-namespace Booky.Domain.Models.Review;
+﻿namespace Booky.Domain.Models.Review;
 
 public class ReviewViewModel
 {

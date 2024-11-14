@@ -54,7 +54,8 @@ public class ReviewService(IBookService bookService, IUnitOfWork unitOfWork, IMa
     public async ValueTask<ReviewViewModel> GetByidAsync(long id)
     {
         var existReview = await unitOfWork.Reviews.SelectAsync(
-           expression: r => r.Id == id && !r.IsDeleted)
+           expression: r => r.Id == id && !r.IsDeleted,
+           includes: ["Book"])
            ?? throw new NotFoundException($"Review is not found with Id ({id})");
 
         var result = new ReviewViewModel
